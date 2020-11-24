@@ -91,7 +91,34 @@ void affichage(int dist[][N], int chemin[][N])
         }
     }
 }
+void coompFortConnexe(int n, int fermeture[][N])
+{
+    bool marque[n];
 
+    for (int i = 0; i < n; i++)
+    {
+        marque[i] = false;
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+        if (!marque[i])
+        {
+
+            cout << "{" << i;
+            for (int j = i + 1; j < n; j++)
+            {
+                if (fermeture[i][j] == 1 && fermeture[j][i] == 1)
+                {
+                    cout << "," << j;
+                    marque[j] = true;
+                }
+            }
+            cout << "}";
+            marque[i] = true;
+        }
+    }
+}
 void fermetureTransitive(int arc[][N], int fermeture[][N])
 {
     for (int i = 0; i < N; i++)
@@ -130,6 +157,6 @@ int main()
     int fermeture[N][N]; // La matrice de la fermeture transitive de D.
 
     fermetureTransitive(arc, fermeture);
-    affichage(dist, fermeture);
+    coompFortConnexe(N, fermeture);
     return EXIT_SUCCESS;
 }
