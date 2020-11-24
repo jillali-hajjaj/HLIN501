@@ -3,7 +3,7 @@
 
 using namespace std;
 
-const int N = 5;
+const int N = 6;
 const int INF = 9999; //La valeur infinie.
 
 bool floydWarshall(int longueur[][N], int dist[][N], int chemin[][N])
@@ -92,17 +92,44 @@ void affichage(int dist[][N], int chemin[][N])
     }
 }
 
+void fermetureTransitive(int arc[][N], int fermeture[][N])
+{
+    for (int i = 0; i < N; i++)
+    {
+        for (int j = 0; j < N; j++)
+            fermeture[i][j] = arc[i][j];
+        fermeture[i][i] = 1;
+    }
+
+    for (int k = 0; k < N; k++)
+        for (int i = 0; i < N; i++)
+            for (int j = 0; j < N; j++)
+                if (fermeture[i][j] == 0 && fermeture[i][k] == 1 && fermeture[k][j] == 1)
+                    fermeture[i][j] = 1;
+}
+
 int main()
 {
 
-    int longueur[N][N] = {{0, 2, INF, 4, INF},   //Les longueurs des arcs.
-                          {INF, 0, 2, INF, INF}, //longueur[i][j]=INF si l'arc ij n'existe pas
-                          {INF, INF, 0, 2, INF},
-                          {INF, -3, INF, 0, 2},
-                          {2, INF, INF, INF, 0}};
-    int dist[N][N];   //Le tableau des distances.
-    int chemin[N][N]; //Le tableau de la premiere etape du chemin de i a j.
-    floydWarshall(longueur, dist, chemin);
-    affichage(dist, chemin);
+    // int longueur[N][N] = {{0, 2, INF, 4, INF},   //Les longueurs des arcs.
+    //                       {INF, 0, 2, INF, INF}, //longueur[i][j]=INF si l'arc ij n'existe pas
+    //                       {INF, INF, 0, 2, INF},
+    //                       {INF, -3, INF, 0, 2},
+    //                       {2, INF, INF, INF, 0}};
+    int dist[N][N]; //Le tableau des distances.
+    // int chemin[N][N]; //Le tableau de la premiere etape du chemin de i a j.
+    // floydWarshall(longueur, dist, chemin);
+    // affichage(dist, chemin);
+
+    int arc[N][N] = {{0, 0, 0, 1, 0, 1}, //La matrice d’adjacences du graphe oriente D.
+                     {1, 0, 1, 1, 0, 0},
+                     {0, 0, 0, 1, 0, 0},
+                     {0, 0, 0, 0, 1, 1},
+                     {0, 0, 1, 0, 0, 1},
+                     {0, 0, 1, 0, 0, 0}};
+    int fermeture[N][N]; // La matrice de la fermeture transitive de D.
+
+    fermetureTransitive(arc, fermeture);
+    affichage(dist, fermeture);
     return EXIT_SUCCESS;
 }
